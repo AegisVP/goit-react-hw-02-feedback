@@ -35,7 +35,7 @@ class App extends Component {
           <FeedbackStats state={this.state} />
         ) : (
           <Box display="flex" justifyContent="center" py="10px">
-            no feedback yet
+            No feedback yet
           </Box>
         )}
       </Wrapper>

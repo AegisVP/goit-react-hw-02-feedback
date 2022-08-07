@@ -17,7 +17,7 @@ class App extends Component {
     bad: 0,
   };
 
-  feedbackClick = (key = null) => {
+  onFeedbackClick = (key = null) => {
     // String(e.target.textContent).toLocaleLowerCase()
     if (!key) return;
 
@@ -30,7 +30,7 @@ class App extends Component {
     const totalStats = this.state.good + this.state.neutral + this.state.bad;
     return (
       <Wrapper>
-        <FeedbackControls onFeedbackClick={this.feedbackClick} />
+        <FeedbackControls onFeedbackClick={this.onFeedbackClick} />
         {totalStats > 0 ? (
           <FeedbackStats state={this.state} />
         ) : (

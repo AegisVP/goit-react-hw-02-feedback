@@ -1,23 +1,20 @@
 import React from 'react';
-import { StatRow, Value, Title } from './Display.styled';
-// import { Wrapper } from '../Common/Wrapper.styled';
+import PropTypes from 'prop-types';
+
 import { Box } from 'components/Common/Box';
-import { lang } from '../App/App';
+import { lang } from '../Common/lang.js';
 
-const FeedbackStats = ({ state: { good, neutral, bad } }) => {
-  const totalVotes = Number(good + neutral + bad);
-  const percentPositive = Math.round((good / (good + neutral + bad)) * 100);
-  let rColor = (255 * (100 - (percentPositive - 50) * 2)) / 100;
-  let gColor = (255 * (percentPositive * 2)) / 100;
+import { StatRow, Value } from './Display.styled';
 
-  rColor = rColor > 255 ? 255 : rColor < 0 ? 0 : rColor;
-  gColor = gColor > 255 ? 255 : gColor < 0 ? 0 : gColor;
+export const Stats = ({ good, neutral, bad, countTotalFeedback, countPositiveFeedbackPercentage }) => {
+  let rColor = 255 - 2.55 * (countPositiveFeedbackPercentage - 75) * 4;
+  let gColor = 2.55 * (countPositiveFeedbackPercentage * 2 - 100) * 2;
 
-  const bgColor = `rgba(${rColor}, ${gColor}, 0, 0.25)`;
+  rColor = Math.round(rColor > 255 ? 255 : rColor < 0 ? 0 : rColor);
+  gColor = Math.round(gColor > 255 ? 255 : gColor < 0 ? 0 : gColor);
 
   return (
     <Box borderTop="2px solid #DDDDDD">
-      <Title>Statistics</Title>
       <StatRow backgroundColor="#ccffcc">
         {lang.good.cc}: <Value>{good}</Value>
       </StatRow>
@@ -28,13 +25,19 @@ const FeedbackStats = ({ state: { good, neutral, bad } }) => {
         {lang.bad.cc}: <Value>{bad}</Value>
       </StatRow>
       <StatRow backgroundColor="#f0f0f0">
-        Total: <Value>{totalVotes}</Value>
+        Total: <Value>{countTotalFeedback}</Value>
       </StatRow>
-      <StatRow backgroundColor={bgColor}>
-        Positive %: <Value>{percentPositive}%</Value>
+      <StatRow backgroundColor={`rgba(${rColor}, ${gColor}, 0, 0.25)`}>
+        Positive %: <Value>{countPositiveFeedbackPercentage}%</Value>
       </StatRow>
     </Box>
   );
 };
 
-export { FeedbackStats };
+Stats.propTypes = {
+  good: PropTypes.number.isRequired,
+  neutral: PropTypes.number.isRequired,
+  bad: PropTypes.number.isRequired,
+  countTotalFeedback: PropTypes.number.isRequired,
+  countPositiveFeedbackPercentage: PropTypes.number.isRequired,
+};

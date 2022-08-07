@@ -1,24 +1,22 @@
-import { Box } from 'components/Common/Box';
-import { Wrapper } from 'components/Common/Wrapper.styled';
-import { FeedbackControls } from 'components/Controlls/Feedback';
-import { FeedbackStats } from 'components/Display/Display';
+import { Section } from 'components/Section/Section';
+import { Notification } from 'components/Notification/Notification';
+import { Controls } from 'components/Controlls/Feedback';
+import { Stats } from 'components/Display/Display';
 import React, { Component } from 'react';
+import { lang } from 'components/Common/lang';
 
-export const lang = {
-  good:{ cc: 'Good', uc: 'GOOD', lc: 'good', key: 'good' },
-  neutral:{ cc: 'Neutral', uc: 'OK', lc: 'ok', key: 'neutral' },
-  bad:{ cc: 'Bad', uc: 'BAD', lc: 'bad', key: 'bad' },
-};
-
-class App extends Component {
+export class App extends Component {
   state = {
     good: 0,
     neutral: 0,
     bad: 0,
   };
 
+  countTotalFeedback = ({ good, neutral, bad } = this.state) => Number(good) + Number(neutral) + Number(bad);
+
+  countPositiveFeedbackPercentage = ({ good } = this.state) => Math.round((good / this.countTotalFeedback()) * 100);
+
   onFeedbackClick = (key = null) => {
-    // String(e.target.textContent).toLocaleLowerCase()
     if (!key) return;
 
     this.setState(prevState => {
@@ -27,37 +25,35 @@ class App extends Component {
   };
 
   render() {
-    const totalStats = this.state.good + this.state.neutral + this.state.bad;
+    const { good, neutral, bad } = this.state;
+    const totalStats = good + neutral + bad;
     return (
-      <Wrapper>
-        <FeedbackControls onFeedbackClick={this.onFeedbackClick} />
+      <>
+        <Section title="How did we do?">
+          <Controls
+            options={[
+              { key: lang.good.key, title: lang.good.uc, bgColor: '#ccffcc' },
+              { key: lang.neutral.key, title: lang.neutral.uc, bgColor: '#ccffff' },
+              { key: lang.bad.key, title: lang.bad.uc, bgColor: '#ffcccc' },
+            ]}
+            onFeedbackClick={this.onFeedbackClick}
+          />
+        </Section>
         {totalStats > 0 ? (
-          <FeedbackStats state={this.state} />
+          <Section title="Statistics">
+            <Stats
+              title="Statistics"
+              good={good}
+              neutral={neutral}
+              bad={bad}
+              countTotalFeedback={this.countTotalFeedback()}
+              countPositiveFeedbackPercentage={this.countPositiveFeedbackPercentage()}
+            />
+          </Section>
         ) : (
-          <Box display="flex" justifyContent="center" py="10px">
-            No feedback yet
-          </Box>
+          <Notification>No feedback yet</Notification>
         )}
-      </Wrapper>
+      </>
     );
   }
 }
-
-// const App = () => {
-//   return (
-//     <div
-//       style={{
-//         height: '100vh',
-//         display: 'flex',
-//         justifyContent: 'center',
-//         alignItems: 'center',
-//         fontSize: 40,
-//         color: '#010101',
-//       }}
-//     >
-//       React homework template
-//     </div>
-//   );
-// };
-
-export { App };

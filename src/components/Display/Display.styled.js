@@ -1,11 +1,5 @@
 import styled from 'styled-components';
 
-export const Title = styled.h2`
-  margin: 0;
-  padding: ${p => p.theme.mp(2, 3)};
-  text-align: center;
-`;
-
 export const StatRow = styled.p`
   ${p => p.backgroundColor && `background-color: ${p.backgroundColor}`};
   margin: 0;

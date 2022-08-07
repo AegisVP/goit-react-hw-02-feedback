@@ -1,5 +1,14 @@
+import { Box } from 'components/Common/Box';
+import { Wrapper } from 'components/Common/Wrapper.styled';
+import { FeedbackControls } from 'components/Controlls/Feedback';
 import { FeedbackStats } from 'components/Display/Display';
 import React, { Component } from 'react';
+
+export const lang = {
+  good:{ cc: 'Good', uc: 'GOOD', lc: 'good', key: 'good' },
+  neutral:{ cc: 'Neutral', uc: 'OK', lc: 'ok', key: 'neutral' },
+  bad:{ cc: 'Bad', uc: 'BAD', lc: 'bad', key: 'bad' },
+};
 
 class App extends Component {
   state = {
@@ -8,10 +17,28 @@ class App extends Component {
     bad: 0,
   };
 
+  feedbackClick = (key = null) => {
+    // String(e.target.textContent).toLocaleLowerCase()
+    if (!key) return;
+
+    this.setState(prevState => {
+      return { [key]: prevState[key] + 1 };
+    });
+  };
+
   render() {
-    // const { good, neutral, bad } = this.state;
+    const totalStats = this.state.good + this.state.neutral + this.state.bad;
     return (
-      <FeedbackStats state={this.state} />
+      <Wrapper>
+        <FeedbackControls onFeedbackClick={this.feedbackClick} />
+        {totalStats > 0 ? (
+          <FeedbackStats state={this.state} />
+        ) : (
+          <Box display="flex" justifyContent="center" py="10px">
+            no feedback yet
+          </Box>
+        )}
+      </Wrapper>
     );
   }
 }

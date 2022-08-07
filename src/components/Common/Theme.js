@@ -29,9 +29,7 @@ export const theme = {
 };
 
 function returnParams(...sizes) {
-  console.log('returnParams started');
   if (sizes.length === 0) return;
-  console.log('returnParams calculating from', [...sizes]);
 
   const resultArray = [];
 
@@ -52,6 +50,5 @@ function returnParams(...sizes) {
     }
   }
 
-  console.log('returnParams returning ', resultArray.join(' '));
   return resultArray.join(' ');
 }
